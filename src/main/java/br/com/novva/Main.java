@@ -1,7 +1,10 @@
 package br.com.novva;
 
+import br.com.novva.controllers.CartaoCnpjController;
 import br.com.novva.controllers.NotaFiscalController;
+import br.com.novva.models.CartaoCnpjModel;
 import br.com.novva.models.NotaFiscalModel;
+import br.com.novva.views.CartaoCnpjView;
 import br.com.novva.views.NotaFiscalView;
 import java.util.Scanner;
 
@@ -10,9 +13,15 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Bem-vindo ao NovvaApp");
 
-        NotaFiscalModel model = new NotaFiscalModel();
-        NotaFiscalView view = new NotaFiscalView();
-        NotaFiscalController controller = new NotaFiscalController(model, view);
+        // Configuração MVC para Nota Fiscal
+        NotaFiscalModel notaModel = new NotaFiscalModel();
+        NotaFiscalView notaView = new NotaFiscalView();
+        NotaFiscalController notaController = new NotaFiscalController(notaModel, notaView);
+
+        // Configuração MVC para Cartão CNPJ
+        CartaoCnpjModel cartaoModel = new CartaoCnpjModel();
+        CartaoCnpjView cartaoView = new CartaoCnpjView();
+        CartaoCnpjController cartaoController = new CartaoCnpjController(cartaoModel, cartaoView);
 
         while (true) {
             System.out.println("\nEscolha uma opção:");
@@ -27,10 +36,10 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    controller.solicitarEmissaoNota(scanner);
+                    notaController.solicitarEmissaoNota(scanner);
                     break;
                 case 2:
-                    System.out.println("Funcionalidade ainda não implementada.");
+                    cartaoController.solicitarEmissaoCartaoCnpj(scanner);
                     break;
                 case 3:
                     System.out.println("Funcionalidade ainda não implementada.");

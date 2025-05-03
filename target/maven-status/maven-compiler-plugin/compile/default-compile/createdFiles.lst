@@ -2,5 +2,8 @@ br/com/novva/views/TerminalView.class
 br/com/novva/models/NotaFiscalModel.class
 br/com/novva/controllers/NotaFiscalController.class
 br/com/novva/config/FirebaseConfig.class
+br/com/novva/models/CartaoCnpjModel.class
+br/com/novva/controllers/CartaoCnpjController.class
 br/com/novva/views/NotaFiscalView.class
+br/com/novva/views/CartaoCnpjView.class
 br/com/novva/Main.class
