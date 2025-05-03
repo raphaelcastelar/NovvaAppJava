@@ -1,4 +1,4 @@
-package br.com.novva;
+package br.com.novva.models;
 
 import br.com.novva.config.FirebaseConfig;
 import com.google.cloud.firestore.Firestore;

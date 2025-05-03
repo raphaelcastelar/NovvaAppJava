@@ -1,5 +1,7 @@
-package br.com.novva;
+package br.com.novva.controllers;
 
+import br.com.novva.models.SimplesNacionalModel;
+import br.com.novva.views.SimplesNacionalView;
 import java.util.Scanner;
 
 public class SimplesNacionalController {

@@ -1,11 +1,14 @@
 package br.com.novva;
 
-import br.com.novva.controllers.CartaoCnpjController;
 import br.com.novva.controllers.NotaFiscalController;
-import br.com.novva.models.CartaoCnpjModel;
+import br.com.novva.controllers.CartaoCnpjController;
+import br.com.novva.controllers.SimplesNacionalController;
 import br.com.novva.models.NotaFiscalModel;
-import br.com.novva.views.CartaoCnpjView;
+import br.com.novva.models.CartaoCnpjModel;
+import br.com.novva.models.SimplesNacionalModel;
 import br.com.novva.views.NotaFiscalView;
+import br.com.novva.views.CartaoCnpjView;
+import br.com.novva.views.SimplesNacionalView;
 import java.util.Scanner;
 
 public class Main {
@@ -22,6 +25,11 @@ public class Main {
         CartaoCnpjModel cartaoModel = new CartaoCnpjModel();
         CartaoCnpjView cartaoView = new CartaoCnpjView();
         CartaoCnpjController cartaoController = new CartaoCnpjController(cartaoModel, cartaoView);
+
+        // Configuração MVC para Simples Nacional
+        SimplesNacionalModel simplesModel = new SimplesNacionalModel();
+        SimplesNacionalView simplesView = new SimplesNacionalView();
+        SimplesNacionalController simplesController = new SimplesNacionalController(simplesModel, simplesView);
 
         while (true) {
             System.out.println("\nEscolha uma opção:");
@@ -42,7 +50,7 @@ public class Main {
                     cartaoController.solicitarEmissaoCartaoCnpj(scanner);
                     break;
                 case 3:
-                    System.out.println("Funcionalidade ainda não implementada.");
+                    simplesController.solicitarEmissaoSimplesNacional(scanner);
                     break;
                 case 0:
                     System.out.println("Saindo...");
