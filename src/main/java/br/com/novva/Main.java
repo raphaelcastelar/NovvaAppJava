@@ -1,64 +1,54 @@
 package br.com.novva;
 
 import br.com.novva.controllers.NotaFiscalController;
-import br.com.novva.controllers.CartaoCnpjController;
-import br.com.novva.controllers.SimplesNacionalController;
 import br.com.novva.models.NotaFiscalModel;
-import br.com.novva.models.CartaoCnpjModel;
-import br.com.novva.models.SimplesNacionalModel;
 import br.com.novva.views.NotaFiscalView;
-import br.com.novva.views.CartaoCnpjView;
-import br.com.novva.views.SimplesNacionalView;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Bem-vindo ao NovvaApp");
+        boolean running = true;
 
-        // Configuração MVC para Nota Fiscal
-        NotaFiscalModel notaModel = new NotaFiscalModel();
-        NotaFiscalView notaView = new NotaFiscalView();
-        NotaFiscalController notaController = new NotaFiscalController(notaModel, notaView);
-
-        // Configuração MVC para Cartão CNPJ
-        CartaoCnpjModel cartaoModel = new CartaoCnpjModel();
-        CartaoCnpjView cartaoView = new CartaoCnpjView();
-        CartaoCnpjController cartaoController = new CartaoCnpjController(cartaoModel, cartaoView);
-
-        // Configuração MVC para Simples Nacional
-        SimplesNacionalModel simplesModel = new SimplesNacionalModel();
-        SimplesNacionalView simplesView = new SimplesNacionalView();
-        SimplesNacionalController simplesController = new SimplesNacionalController(simplesModel, simplesView);
-
-        while (true) {
+        while (running) {
             System.out.println("\nEscolha uma opção:");
             System.out.println("1. Emissão da Nota Fiscal");
             System.out.println("2. Emissão do Cartão CNPJ");
             System.out.println("3. Emissão do Simples Nacional");
+            System.out.println("4. Solicitação de Cancelamento de Nota Fiscal");
             System.out.println("0. Sair");
             System.out.print("Digite sua escolha: ");
 
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consumir nova linha
 
+            if (choice == 0) {
+                running = false;
+                System.out.println("Encerrando o programa...");
+                break;
+            }
+
+            NotaFiscalModel model = new NotaFiscalModel();
+            NotaFiscalView view = new NotaFiscalView();
+            NotaFiscalController controller = new NotaFiscalController(model, view);
+
             switch (choice) {
                 case 1:
-                    notaController.solicitarEmissaoNota(scanner);
+                    controller.solicitarEmissaoNota(scanner);
                     break;
                 case 2:
-                    cartaoController.solicitarEmissaoCartaoCnpj(scanner);
+                    System.out.println("Funcionalidade de Emissão do Cartão CNPJ ainda não implementada.");
                     break;
                 case 3:
-                    simplesController.solicitarEmissaoSimplesNacional(scanner);
+                    System.out.println("Funcionalidade de Emissão do Simples Nacional ainda não implementada.");
                     break;
-                case 0:
-                    System.out.println("Saindo...");
-                    scanner.close();
-                    return;
+                case 4:
+                    controller.solicitarCancelamentoNota(scanner);
+                    break;
                 default:
-                    System.out.println("Opção inválida!");
+                    System.out.println("Opção inválida! Tente novamente.");
             }
         }
+        scanner.close();
     }
 }
