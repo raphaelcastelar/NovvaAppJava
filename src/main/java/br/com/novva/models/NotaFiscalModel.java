@@ -185,6 +185,66 @@ public class NotaFiscalModel {
         }
     }
 
+    public void gerenciarTomador(String cpf, String cnpj, String apelido) {
+        System.out.println("Iniciando gerenciamento de tomador para CPF: " + cpf + " com CNPJ: " + cnpj);
+        try {
+            if (db == null) {
+                System.err.println("Firestore não está inicializado.");
+                return;
+            }
+
+            String cpfNormalizado = normalizarCpf(cpf);
+            DocumentReference docRef = db.collection("tomador")
+                .document(cpfNormalizado)
+                .collection("CNPJ")
+                .document(cnpj);
+
+            Map<String, Object> tomadorData = new HashMap<>();
+            tomadorData.put("apelido", apelido);
+            tomadorData.put("horario_adicao", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy HH:mm")));
+
+            WriteResult result = docRef.set(tomadorData).get();
+            System.out.println("Tomador adicionado com sucesso! ID: " + docRef.getId() + " às " + result.getUpdateTime());
+        } catch (InterruptedException | ExecutionException e) {
+            System.err.println("Erro ao gerenciar tomador: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Erro inesperado: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public List<Map<String, Object>> listarTomadores(String cpf) {
+        List<Map<String, Object>> tomadores = new ArrayList<>();
+        try {
+            if (db == null) {
+                System.err.println("Firestore não está inicializado.");
+                return tomadores;
+            }
+
+            String cpfNormalizado = normalizarCpf(cpf);
+            List<QueryDocumentSnapshot> documents = db.collection("tomador")
+                .document(cpfNormalizado)
+                .collection("CNPJ")
+                .get()
+                .get()
+                .getDocuments();
+
+            for (QueryDocumentSnapshot doc : documents) {
+                Map<String, Object> tomador = new HashMap<>(doc.getData());
+                tomador.put("cnpj", doc.getId());
+                tomadores.add(tomador);
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            System.err.println("Erro ao listar tomadores: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Erro inesperado: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return tomadores;
+    }
+
     private String normalizarCpf(String cpf) {
         return cpf != null ? cpf.replaceAll("[^0-9]", "") : "";
     }

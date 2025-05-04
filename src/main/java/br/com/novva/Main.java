@@ -16,6 +16,7 @@ public class Main {
             System.out.println("2. Emissão do Cartão CNPJ");
             System.out.println("3. Emissão do Simples Nacional");
             System.out.println("4. Solicitação de Cancelamento de Nota Fiscal");
+            System.out.println("5. Gerenciar Tomadores");
             System.out.println("0. Sair");
             System.out.print("Digite sua escolha: ");
 
@@ -44,6 +45,9 @@ public class Main {
                     break;
                 case 4:
                     controller.solicitarCancelamentoNota(scanner);
+                    break;
+                case 5:
+                    controller.gerenciarTomador(scanner);
                     break;
                 default:
                     System.out.println("Opção inválida! Tente novamente.");
