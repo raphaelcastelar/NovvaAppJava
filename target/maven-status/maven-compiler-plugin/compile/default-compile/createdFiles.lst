@@ -3,8 +3,11 @@ br/com/novva/views/SimplesNacionalView.class
 br/com/novva/models/NotaFiscalModel.class
 br/com/novva/controllers/CartaoCnpjController.class
 br/com/novva/models/SimplesNacionalModel.class
+br/com/novva/models/RelatorioModel.class
 br/com/novva/Main.class
+br/com/novva/views/RelatorioView.class
 br/com/novva/controllers/SimplesNacionalController.class
+br/com/novva/controllers/RelatorioController.class
 br/com/novva/controllers/NotaFiscalController.class
 br/com/novva/config/FirebaseConfig.class
 br/com/novva/models/CartaoCnpjModel.class
