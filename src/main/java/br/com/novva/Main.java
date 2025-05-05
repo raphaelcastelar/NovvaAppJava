@@ -1,8 +1,15 @@
 package br.com.novva;
 
+import br.com.novva.controllers.CartaoCnpjController;
 import br.com.novva.controllers.NotaFiscalController;
+import br.com.novva.controllers.SimplesNacionalController;
+import br.com.novva.models.CartaoCnpjModel;
 import br.com.novva.models.NotaFiscalModel;
+import br.com.novva.models.SimplesNacionalModel;
+import br.com.novva.views.CartaoCnpjView;
 import br.com.novva.views.NotaFiscalView;
+import br.com.novva.views.SimplesNacionalView;
+
 import java.util.Scanner;
 
 public class Main {
@@ -31,23 +38,33 @@ public class Main {
 
             NotaFiscalModel model = new NotaFiscalModel();
             NotaFiscalView view = new NotaFiscalView();
-            NotaFiscalController controller = new NotaFiscalController(model, view);
+            NotaFiscalController notaController = new NotaFiscalController(model, view);
+
+            CartaoCnpjModel cartaoModel = new CartaoCnpjModel();
+            CartaoCnpjView cartaoView = new CartaoCnpjView();
+            CartaoCnpjController cartaoController = new CartaoCnpjController(cartaoModel, cartaoView);
+
+            SimplesNacionalModel simplesModel = new SimplesNacionalModel();
+            SimplesNacionalView simplesView = new SimplesNacionalView();
+            SimplesNacionalController simplesController = new SimplesNacionalController(simplesModel, simplesView);
 
             switch (choice) {
                 case 1:
-                    controller.solicitarEmissaoNota(scanner);
+                    notaController.solicitarEmissaoNota(scanner);
                     break;
                 case 2:
-                    System.out.println("Funcionalidade de Emissão do Cartão CNPJ ainda não implementada.");
+                    cartaoController.solicitarEmissaoCartaoCnpj(scanner);
+                    //System.out.println("Funcionalidade de Emissão do Cartão CNPJ ainda não implementada.");
                     break;
                 case 3:
-                    System.out.println("Funcionalidade de Emissão do Simples Nacional ainda não implementada.");
+                    simplesController.solicitarEmissaoSimplesNacional(scanner);
+                    //System.out.println("Funcionalidade de Emissão do Simples Nacional ainda não implementada.");
                     break;
                 case 4:
-                    controller.solicitarCancelamentoNota(scanner);
+                    notaController.solicitarCancelamentoNota(scanner);
                     break;
                 case 5:
-                    controller.gerenciarTomador(scanner);
+                    notaController.gerenciarTomador(scanner);
                     break;
                 default:
                     System.out.println("Opção inválida! Tente novamente.");
