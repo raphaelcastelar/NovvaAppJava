@@ -18,27 +18,13 @@ public class NotaFiscalController {
     public void solicitarEmissaoNota(Scanner scanner) {
         String[] dados = view.coletarDadosNotaFiscal(scanner);
         String cpf = dados[0];
-        String municipio = dados[1];
 
         List<Map<String, Object>> tomadores = model.listarTomadores(cpf);
-        if (tomadores.isEmpty()) {
-            view.exibirMensagem("Nenhum tomador cadastrado. Adicione um tomador antes de emitir a nota.");
-            return;
-        }
-
         view.exibirTomadores(tomadores);
+
         int escolhaCnpj = view.selecionarTomador(scanner, tomadores.size());
-        if (escolhaCnpj < 1 || escolhaCnpj > tomadores.size()) {
-            view.exibirMensagem("Escolha de tomador inválida!");
-            return;
-        }
-
-        String cnpj = (String) tomadores.get(escolhaCnpj - 1).get("cnpj");
-        double valor = Double.parseDouble(dados[2]);
-        String data = dados[3];
-
-        model.registrarNota(cpf, municipio, cnpj, valor, data);
-        view.exibirMensagem("Emissão de nota fiscal concluída!");
+        Map<String, Object> resultado = model.emitirNotaFiscal(dados, escolhaCnpj);
+        view.exibirMensagem((String) resultado.get("mensagem"));
     }
 
     public void gerenciarTomador(Scanner scanner) {
