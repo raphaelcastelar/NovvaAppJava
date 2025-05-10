@@ -4,14 +4,7 @@ import br.com.novva.controllers.NotaFiscalController;
 import br.com.novva.controllers.CartaoCnpjController;
 import br.com.novva.controllers.SimplesNacionalController;
 import br.com.novva.controllers.RelatorioController;
-import br.com.novva.models.NotaFiscalModel;
-import br.com.novva.models.CartaoCnpjModel;
-import br.com.novva.models.SimplesNacionalModel;
-import br.com.novva.models.RelatorioModel;
-import br.com.novva.views.NotaFiscalView;
-import br.com.novva.views.CartaoCnpjView;
-import br.com.novva.views.SimplesNacionalView;
-import br.com.novva.views.RelatorioView;
+import br.com.novva.factories.ControllerFactory;
 import java.util.Scanner;
 
 public class Main {
@@ -19,25 +12,11 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Bem-vindo ao NovvaApp");
 
-        // Configuração MVC para Nota Fiscal
-        NotaFiscalModel notaModel = new NotaFiscalModel();
-        NotaFiscalView notaView = new NotaFiscalView();
-        NotaFiscalController notaController = new NotaFiscalController(notaModel, notaView);
-
-        // Configuração MVC para Cartão CNPJ
-        CartaoCnpjModel cartaoModel = new CartaoCnpjModel();
-        CartaoCnpjView cartaoView = new CartaoCnpjView();
-        CartaoCnpjController cartaoController = new CartaoCnpjController(cartaoModel, cartaoView);
-
-        // Configuração MVC para Simples Nacional
-        SimplesNacionalModel simplesModel = new SimplesNacionalModel();
-        SimplesNacionalView simplesView = new SimplesNacionalView();
-        SimplesNacionalController simplesController = new SimplesNacionalController(simplesModel, simplesView);
-
-        // Configuração MVC para Relatório
-        RelatorioModel relatorioModel = new RelatorioModel();
-        RelatorioView relatorioView = new RelatorioView();
-        RelatorioController relatorioController = new RelatorioController(relatorioModel, relatorioView);
+        // Uso da Factory Method para criar os controllers
+        NotaFiscalController notaController = (NotaFiscalController) ControllerFactory.createController("NotaFiscal");
+        CartaoCnpjController cartaoController = (CartaoCnpjController) ControllerFactory.createController("CartaoCnpj");
+        SimplesNacionalController simplesController = (SimplesNacionalController) ControllerFactory.createController("SimplesNacional");
+        RelatorioController relatorioController = (RelatorioController) ControllerFactory.createController("Relatorio");
 
         while (true) {
             System.out.println("\nEscolha uma opção:");

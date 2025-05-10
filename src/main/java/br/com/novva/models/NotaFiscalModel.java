@@ -5,6 +5,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import br.com.novva.config.FirebaseConfig;
+import br.com.novva.strategies.CpfNormalizationStrategy;
+import br.com.novva.strategies.NormalizationStrategy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -16,9 +18,11 @@ import java.util.TreeSet;
 
 public class NotaFiscalModel {
     private Firestore db;
+    private NormalizationStrategy normalizationStrategy;
 
     public NotaFiscalModel() {
         this.db = FirebaseConfig.getFirestore();
+        this.normalizationStrategy = new CpfNormalizationStrategy();
         if (db == null) {
             System.err.println("Falha ao inicializar Firestore. Verifique a configuração do Firebase.");
             throw new IllegalStateException("Firestore não inicializado.");
@@ -33,13 +37,14 @@ public class NotaFiscalModel {
                 return;
             }
 
+            String cpfNormalizado = normalizationStrategy.normalize(cpf);
             DocumentReference docRef = db.collection("servicos")
-                .document(normalizarCpf(cpf))
+                .document(cpfNormalizado)
                 .collection("notas")
                 .document();
 
             Map<String, Object> notaData = new HashMap<>();
-            notaData.put("cpf", normalizarCpf(cpf));
+            notaData.put("cpf", cpfNormalizado);
             notaData.put("municipio", municipio);
             notaData.put("cnpj", cnpj);
             notaData.put("valor", valor);
@@ -69,7 +74,7 @@ public class NotaFiscalModel {
                 return meses;
             }
 
-            String cpfNormalizado = normalizarCpf(cpf);
+            String cpfNormalizado = normalizationStrategy.normalize(cpf);
             List<QueryDocumentSnapshot> documents = db.collection("servicos")
                 .document(cpfNormalizado)
                 .collection("notas")
@@ -115,7 +120,7 @@ public class NotaFiscalModel {
                 return notas;
             }
 
-            String cpfNormalizado = normalizarCpf(cpf);
+            String cpfNormalizado = normalizationStrategy.normalize(cpf);
             List<QueryDocumentSnapshot> documents = db.collection("servicos")
                 .document(cpfNormalizado)
                 .collection("notas")
@@ -159,7 +164,7 @@ public class NotaFiscalModel {
                 return;
             }
 
-            String cpfNormalizado = normalizarCpf(cpf);
+            String cpfNormalizado = normalizationStrategy.normalize(cpf);
             String dataSolicitacao = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yy"));
             String horarioSolicitacao = LocalDateTime.now().format(
                 DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"));
@@ -193,7 +198,7 @@ public class NotaFiscalModel {
                 return;
             }
 
-            String cpfNormalizado = normalizarCpf(cpf);
+            String cpfNormalizado = normalizationStrategy.normalize(cpf);
             DocumentReference docRef = db.collection("tomador")
                 .document(cpfNormalizado)
                 .collection("CNPJ")
@@ -222,7 +227,7 @@ public class NotaFiscalModel {
                 return tomadores;
             }
 
-            String cpfNormalizado = normalizarCpf(cpf);
+            String cpfNormalizado = normalizationStrategy.normalize(cpf);
             List<QueryDocumentSnapshot> documents = db.collection("tomador")
                 .document(cpfNormalizado)
                 .collection("CNPJ")
@@ -243,9 +248,5 @@ public class NotaFiscalModel {
             e.printStackTrace();
         }
         return tomadores;
-    }
-
-    private String normalizarCpf(String cpf) {
-        return cpf != null ? cpf.replaceAll("[^0-9]", "") : "";
     }
 }

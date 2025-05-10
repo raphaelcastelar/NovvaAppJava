@@ -2,12 +2,16 @@
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/models/RelatorioModel.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/controllers/NotaFiscalController.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/controllers/RelatorioController.java
+/Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/facades/FirestoreFacade.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/views/CartaoCnpjView.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/views/NotaFiscalView.java
+/Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/strategies/NormalizationStrategy.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/Main.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/views/SimplesNacionalView.java
+/Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/strategies/CpfNormalizationStrategy.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/models/SimplesNacionalModel.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/controllers/SimplesNacionalController.java
+/Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/factories/ControllerFactory.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/controllers/CartaoCnpjController.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/models/CartaoCnpjModel.java
 /Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/java/br/com/novva/models/NotaFiscalModel.java

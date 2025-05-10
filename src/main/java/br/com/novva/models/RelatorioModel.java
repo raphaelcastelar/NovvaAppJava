@@ -3,6 +3,8 @@ package br.com.novva.models;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import br.com.novva.config.FirebaseConfig;
+import br.com.novva.strategies.CpfNormalizationStrategy;
+import br.com.novva.strategies.NormalizationStrategy;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -10,9 +12,10 @@ import java.util.ArrayList;
 
 public class RelatorioModel {
     private Firestore db;
-
+    private NormalizationStrategy normalizationStrategy;
     public RelatorioModel() {
         this.db = FirebaseConfig.getFirestore();
+        this.normalizationStrategy = new CpfNormalizationStrategy();
         if (db == null) {
             System.err.println("Falha ao inicializar Firestore. Verifique a configuração do Firebase.");
             throw new IllegalStateException("Firestore não inicializado.");
@@ -30,7 +33,7 @@ public class RelatorioModel {
                 return resultado;
             }
 
-            String cpfNormalizado = normalizarCpf(cpf);
+            String cpfNormalizado = normalizationStrategy.normalize(cpf);
             List<QueryDocumentSnapshot> documents = db.collection("servicos")
                 .document(cpfNormalizado)
                 .collection("notas")
@@ -68,7 +71,4 @@ public class RelatorioModel {
         return resultado;
     }
 
-    private String normalizarCpf(String cpf) {
-        return cpf != null ? cpf.replaceAll("[^0-9]", "") : "";
-    }
 }
