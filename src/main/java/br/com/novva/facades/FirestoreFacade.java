@@ -8,6 +8,7 @@ import br.com.novva.config.FirebaseConfig;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
 
 public class FirestoreFacade {
     private Firestore db;
@@ -47,11 +48,14 @@ public class FirestoreFacade {
 
     public List<QueryDocumentSnapshot> getDocuments(String collectionPath) {
         try {
-            return db.collection(collectionPath).get().get().getDocuments();
+            System.out.println("Buscando documentos na coleção: " + collectionPath);
+            List<QueryDocumentSnapshot> documents = db.collection(collectionPath).get().get().getDocuments();
+            System.out.println("Documentos encontrados: " + documents.size());
+            return documents;
         } catch (InterruptedException | ExecutionException e) {
             System.err.println("Erro ao buscar documentos: " + e.getMessage());
             e.printStackTrace();
-            return new java.util.ArrayList<>();
+            return new ArrayList<>();
         }
     }
 }

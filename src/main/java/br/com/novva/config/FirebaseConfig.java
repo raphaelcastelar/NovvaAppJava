@@ -1,80 +1,65 @@
 package br.com.novva.config;
 
+import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.FirestoreOptions;
+import com.google.firebase.cloud.FirestoreClient;
 
-import java.io.InputStream;
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class FirebaseConfig {
     private static Firestore db;
 
     public static Firestore getFirestore() {
         if (db == null) {
-            System.out.println("Inicializando Firestore...");
             try {
-                // Verifica se o ClassLoader está disponível
-                ClassLoader classLoader = FirebaseConfig.class.getClassLoader();
-                if (classLoader == null) {
-                    System.err.println("ClassLoader é null. Não é possível carregar recursos.");
-                    return null;
+                // Caminho absoluto do arquivo de credenciais (nome original)
+                String credentialsPath = "/Users/selmajosecastelarferreira/Desktop/NovvaAppJava/src/main/resources/firebase-credentials.json";
+                System.out.println("Verificando arquivo de credenciais em: " + credentialsPath);
+
+                // Verificar se o arquivo existe
+                File credentialsFile = new File(credentialsPath);
+                if (!credentialsFile.exists()) {
+                    System.err.println("Arquivo não encontrado: " + credentialsPath);
+                    System.err.println("Por favor, confirme se o arquivo 'firebase-credentials.json' está no diretório src/main/resources/.");
+                    throw new IOException("Arquivo de credenciais não encontrado: " + credentialsPath);
                 }
-                System.out.println("ClassLoader encontrado: " + classLoader);
-
-                // Carrega o arquivo do classpath
-                InputStream serviceAccount = classLoader.getResourceAsStream("firebase-credentials.json");
-                if (serviceAccount == null) {
-                    System.err.println("Arquivo firebase-credentials.json não encontrado no classpath. Verifique se está em src/main/resources/.");
-                    return null;
-                }
-                System.out.println("Arquivo de credenciais carregado com sucesso do classpath.");
-
-                // Lê o conteúdo do arquivo e armazena em um byte array
-                byte[] credentialBytes = serviceAccount.readAllBytes();
-                serviceAccount.close(); // Fecha o InputStream original
-                String jsonContent = new String(credentialBytes);
-                System.out.println("Conteúdo do arquivo (resumido): " + jsonContent.substring(0, Math.min(jsonContent.length(), 100)) + "...");
-
-                // Verifica se o project_id está presente no JSON
-                if (!jsonContent.contains("\"project_id\": \"novva-d0b7a\"")) {
-                    System.err.println("O project_id 'novva-d0b7a' não foi encontrado no arquivo firebase-credentials.json. Verifique o arquivo.");
-                    return null;
+                if (!credentialsFile.canRead()) {
+                    System.err.println("Arquivo encontrado, mas não pode ser lido (problema de permissões): " + credentialsPath);
+                    throw new IOException("Não é possível ler o arquivo de credenciais: " + credentialsPath);
                 }
 
-                // Cria um novo InputStream a partir do byte array para o FirebaseOptions
-                InputStream firebaseStream = new ByteArrayInputStream(credentialBytes);
+                System.out.println("Arquivo encontrado e legível: " + credentialsPath);
+                FileInputStream serviceAccount = new FileInputStream(credentialsFile);
+
+                // Inicializar o Firebase com as credenciais
                 FirebaseOptions options = FirebaseOptions.builder()
-                    .setCredentials(GoogleCredentials.fromStream(firebaseStream))
-                    .setProjectId("novva-d0b7a")
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                     .build();
-                System.out.println("Opções de Firebase configuradas.");
 
-                // Inicializa o FirebaseApp
-                FirebaseApp.initializeApp(options);
-                System.out.println("FirebaseApp inicializado.");
-
-                // Cria um novo InputStream a partir do byte array para o FirestoreOptions
-                InputStream firestoreStream = new ByteArrayInputStream(credentialBytes);
-                FirestoreOptions firestoreOptions = FirestoreOptions.newBuilder()
-                    .setProjectId("novva-d0b7a")
-                    .setCredentials(GoogleCredentials.fromStream(firestoreStream))
-                    .build();
-                db = firestoreOptions.getService();
-                if (db == null) {
-                    System.err.println("Firestore não pôde ser inicializado: db é null.");
+                System.out.println("Inicializando FirebaseApp...");
+                if (FirebaseApp.getApps().isEmpty()) {
+                    FirebaseApp.initializeApp(options);
+                    System.out.println("FirebaseApp inicializado com sucesso.");
                 } else {
-                    System.out.println("Firestore instância criada com sucesso: " + db);
+                    System.out.println("FirebaseApp já inicializado.");
                 }
-            } catch (Exception e) {
-                System.err.println("Erro ao inicializar Firebase: " + e.getMessage());
+
+                // Obter a instância do Firestore
+                db = FirestoreClient.getFirestore();
+                System.out.println("Firestore inicializado com sucesso.");
+            } catch (IOException e) {
+                System.err.println("Erro ao inicializar o Firestore: " + e.getMessage());
                 e.printStackTrace();
-                return null;
+                throw new RuntimeException("Falha na inicialização do Firestore", e);
+            } catch (Exception e) {
+                System.err.println("Erro inesperado ao inicialização do Firestore: " + e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException("Erro inesperado na inicialização do Firestore", e);
             }
-        } else {
-            System.out.println("Reutilizando instância existente de Firestore: " + db);
         }
         return db;
     }

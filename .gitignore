@@ -16,3 +16,6 @@
 /.npm-global
 .bashrc
 /.npm-global
+target/classes/firebase-credentials.json
+target/classes/firebase-credentials.json
+/target
