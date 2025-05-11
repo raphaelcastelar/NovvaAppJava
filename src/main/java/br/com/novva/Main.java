@@ -30,7 +30,7 @@ public class Main {
             System.out.print("Digite sua escolha: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consumir nova linha
+            scanner.nextLine();
 
             switch (choice) {
                 case 1:
